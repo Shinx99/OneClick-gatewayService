@@ -1,0 +1,115 @@
+HELP.md
+
+### Maven ###
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### Gradle (nếu có team member dùng Gradle) ###
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+.gradle/
+
+### IDEs ###
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+
+### Logs ###
+*.log
+*.out
+*.err
+logs/
+
+### OS files ###
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*~
+
+### Editor backups ###
+*.swp
+*.swo
+*~
+
+### Java compiled ###
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+### Environment & Secrets ### ⭐ Enhanced Security
+.env
+.env.local
+.env.*.local
+*.properties.local
+application-secrets.yml
+application-local.yml
+
+### Docker ###
+/pgdata
+/m2cache
+docker-compose.override.yml
+
+### Spring Boot Specific ### ⭐ Added
+.metadata
+tmp/
+*.tmp
+*.bak
+
+### Database ### ⭐ Added
+*.db
+*.sqlite
+*.h2.db
+
+### Testing ### ⭐ Added
+test-output/
+.testcontainers.properties
+
+### Package Files ### ⭐ Added (if team Windows)
+*.7z
+*.dmg
+*.iso
+*.msi
+*.msm
+*.msp
+
+### Keep important files ### ⭐ Critical additions
+!.env.example
+!docker-compose.yml
+!compose.yml
+!Dockerfile
+!README.md
+!.gitignore

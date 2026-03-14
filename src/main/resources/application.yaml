@@ -1,0 +1,82 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: ${APP_NAME:gateway-service}
+  cloud:
+    compatibility-verifier:
+      enabled: false
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "${CORS_ALLOWED_ORIGINS:*}"
+            allowedMethods: ["GET","POST","PUT","DELETE","OPTIONS","PATCH"]
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        # AUTH SERVICE
+        - id: authService-be
+          uri: lb://authService-be
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - StripPrefix=0
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@ipKeyResolver}"
+                redis-rate-limiter.replenishRate: ${GATEWAY_AUTH_REPLENISH_RATE:1000}
+                redis-rate-limiter.burstCapacity: ${GATEWAY_AUTH_BURST_CAPACITY:1000}
+                redis-rate-limiter.requestedTokens: 1
+
+        # CV/JOB SERVICE
+        - id: cv-service
+          uri: http://recruitmentService-app:8080
+          predicates:
+            - Path=/cv/**
+            - Path=/job/**
+          filters:
+            - StripPrefix=0
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: ${GATEWAY_CV_REPLENISH_RATE:500}
+                redis-rate-limiter.burstCapacity: ${GATEWAY_CV_BURST_CAPACITY:2000}
+
+        # SOCIAL SERVICE
+        - id: social-service
+          uri: http://socialService-app:8080
+          predicates:
+            - Path=/social/**
+          filters:
+            - StripPrefix=0
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: ${GATEWAY_SOCIAL_REPLENISH_RATE:300}
+                redis-rate-limiter.burstCapacity: ${GATEWAY_SOCIAL_BURST_CAPACITY:1000}
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST:gateway-redis}
+      port: ${SPRING_REDIS_PORT:6379}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway,metrics
+  health:
+    redis:
+      enabled: false
+
+logging:
+  level:
+    root: ${LOGGING_LEVEL_ROOT:INFO}
+    org.springframework.cloud.gateway: DEBUG
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://eureka-server:8761/eureka/}
+    enabled: true
+  instance:
+    prefer-ip-address: true

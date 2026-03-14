@@ -1,0 +1,59 @@
+services:
+  eureka-server:
+    image: foxundermoon/eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      - EUREKA_SERVER_ENABLE_SELF_PRESERVATION=false
+      - EUREKA_SERVER_RENEWAL_PERCENT_THRESHOLD=0.49
+      - EUREKA_SERVER_EVICTION_INTERVAL_TIMER_IN_MS=10000
+    networks:
+      - oneclick-network
+
+  # gateway compose.yml
+  redis:
+    image: redis:7-alpine
+    container_name: gateway-redis
+    ports:
+      - "6378:6379"  # Host 6378 → Container 6379
+    networks:
+      - oneclick-network
+
+  gateway:
+    build: .
+    container_name: gateway-service-gateway
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./src:/app/src:cached
+      - ./pom.xml:/app/pom.xml:cached
+      - maven-cache:/root/.m2
+    depends_on:
+      - eureka-server
+
+    networks:
+      - oneclick-network
+
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+
+      # Redis
+      - SPRING_REDIS_HOST=gateway-redis
+      - SPRING_REDIS_PORT=6379
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8761/eureka/apps || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
+
+volumes:
+  maven-cache: {}
+
+networks:
+  oneclick-network:
+    external: true
