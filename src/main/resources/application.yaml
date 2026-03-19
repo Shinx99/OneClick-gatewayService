@@ -27,20 +27,21 @@ spring:
               args:
                 key-resolver: "#{@ipKeyResolver}"
                 redis-rate-limiter.replenishRate: ${GATEWAY_AUTH_REPLENISH_RATE:1000}
-                redis-rate-limiter.burstCapacity: ${GATEWAY_AUTH_BURST_CAPACITY:1000}
+                redis-rate-limiter.burstCapacity: ${GATEWAY_AUTH_BURST_CAPACITY:2000}
                 redis-rate-limiter.requestedTokens: 1
 
         # CV/JOB SERVICE
-        - id: cv-service
-          uri: http://recruitmentService-app:8080
+        - id: recruitmentService-be
+          uri: lb://recruitmentService-be
           predicates:
+            - Path=/recruitment/**
             - Path=/cv/**
             - Path=/job/**
           filters:
             - StripPrefix=0
             - name: RequestRateLimiter
               args:
-                redis-rate-limiter.replenishRate: ${GATEWAY_CV_REPLENISH_RATE:500}
+                redis-rate-limiter.replenishRate: ${GATEWAY_CV_REPLENISH_RATE:1000}
                 redis-rate-limiter.burstCapacity: ${GATEWAY_CV_BURST_CAPACITY:2000}
 
         # SOCIAL SERVICE
