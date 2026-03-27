@@ -82,12 +82,16 @@ docker-compose logs -f gateway
 
 | Issue                    | Solution                                      |
 |--------------------------|-----------------------------------------------|
-| **Network not found**    | `./start.sh` (auto-creates network)           |
-| **503 Service Unavailable** | Check Eureka: `http://localhost:8761`     |
-| **429 Too Many Requests** | `docker-compose up redis`                    |
-| **Gateway won't start**  | Wait for Eureka/Redis: `./start.sh`           |
-| **CORS errors**          | All origins enabled by default                |
+| `Redis connection failed` | Ensure `gateway-redis` is running on 6378    |
+| `Route not found`        | Check if target service is registered in Eureka |
+| `Docker network error`   | Run `docker network create oneclick-network` |
 
-## 💡 Pro Tips
+## 🤝 Contributing
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-Eureka UI: http://localhost:8761
+## 📄 License
+Distributed under the MIT License. See `LICENSE` for more information.
