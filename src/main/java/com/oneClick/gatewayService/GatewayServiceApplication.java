@@ -6,6 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 
+import org.springframework.context.annotation.ComponentScan;
+
+
 @SpringBootApplication
 @EnableDiscoveryClient //use Eureka
 public class GatewayServiceApplication {
