@@ -52,6 +52,7 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ← Preflight OK
+                        .pathMatchers("/ws/**").permitAll()  // Thêm /ws/**
                         .pathMatchers("/api/auth/**", "/actuator/**").permitAll()
                         .pathMatchers("/api/recruitment/candidate/**").hasAuthority("ROLE_candidate")
                         .pathMatchers("/api/recruitment/employer/**").hasAuthority("ROLE_recruiter")
