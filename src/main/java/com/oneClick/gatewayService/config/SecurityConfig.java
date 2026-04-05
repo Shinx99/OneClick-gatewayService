@@ -84,7 +84,8 @@ public class SecurityConfig {
                 .filter(s -> !s.isBlank())
                 .collect(Collectors.toList());
 
-        config.setAllowedOrigins(allowedOrigins);
+        //config.setAllowedOrigins(allowedOrigins);
+        config.setAllowedOriginPatterns(allowedOrigins);
         config.setAllowedMethods(allowedMethods);
         config.setAllowedHeaders(allowedHeaders.isEmpty() ? List.of("*") : allowedHeaders);
         config.setExposedHeaders(List.of("Authorization", "X-Total-Count"));
