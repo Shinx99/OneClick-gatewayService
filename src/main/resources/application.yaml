@@ -15,10 +15,19 @@ spring:
   cloud:
     compatibility-verifier:
       enabled: false
+<<<<<<< Updated upstream
 
     gateway:
       default-filters:
 
+=======
+    loadbalancer:
+      logging:
+        enabled: true
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials Vary, RETAIN_FIRST
+>>>>>>> Stashed changes
       globalcors:
         cors-configurations:
           '[/**]':
@@ -46,12 +55,27 @@ spring:
             - PreserveHostHeader
             - DedupeResponseHeader=Set-Cookie Access-Control-Allow-Origin
 
-        # CV/JOB SERVICE
+        # WEBSOCKET / SOCKJS - Dùng HTTP upgrade
+        - id: recruitmentService-ws
+          uri: lb://recruitmentService-be
+          predicates:
+            - Path=/ws/**
+          filters:
+            - StripPrefix=0
+          metadata:
+            response-timeout: 600000
+            connect-timeout: 600000
+
+        # RECRUITMENT SERVICE - HTTP API
         - id: recruitmentService-be
           uri: lb://recruitmentService-be
 #          uri: http://recruitmentService-be-app:8080
           predicates:
+<<<<<<< Updated upstream
             - Path=/api/recruitment/**
+=======
+            - Path=/api/recruitment/**, /api/chatbot/**, /api/profile/**, /api/internal/**
+>>>>>>> Stashed changes
           filters:
             - StripPrefix=0
             - name: RequestRateLimiter
@@ -59,16 +83,17 @@ spring:
                 redis-rate-limiter.replenishRate: ${GATEWAY_CV_REPLENISH_RATE:1000}
                 redis-rate-limiter.burstCapacity: ${GATEWAY_CV_BURST_CAPACITY:2000}
 
+
         # SOCIAL SERVICE
-        - id: social-service
-          uri: http://socialService-app:8080
+        - id: socialService-be
+          uri: lb://socialService-be
           predicates:
             - Path=/social/**
           filters:
             - StripPrefix=0
             - name: RequestRateLimiter
               args:
-                redis-rate-limiter.replenishRate: ${GATEWAY_SOCIAL_REPLENISH_RATE:300}
+                redis-rate-limiter.replenishRate: ${GATEWAY_SOCIAL_REPLENISH_RATE:1000}
                 redis-rate-limiter.burstCapacity: ${GATEWAY_SOCIAL_BURST_CAPACITY:1000}
 
   data:
