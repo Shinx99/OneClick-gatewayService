@@ -15,27 +15,23 @@ spring:
   cloud:
     compatibility-verifier:
       enabled: false
-<<<<<<< Updated upstream
 
-    gateway:
-      default-filters:
-
-=======
     loadbalancer:
       logging:
         enabled: true
+
     gateway:
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials Vary, RETAIN_FIRST
->>>>>>> Stashed changes
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "${CORS_ALLOWED_ORIGINS:*}"
-#            allowedOriginPatterns: ["http://localhost:*"]
-            allowedMethods: ["GET","POST","PUT","DELETE","OPTIONS","PATCH"]
-            allowedHeaders: "*"
-            allowCredentials: true
+
+#    globalcors:
+#        cors-configurations:
+#          '[/**]':
+#            allowedOrigins: "${CORS_ALLOWED_ORIGINS:*}"
+##            allowedOriginPatterns: ["http://localhost:*"]
+#            allowedMethods: ["GET","POST","PUT","DELETE","OPTIONS","PATCH"]
+#            allowedHeaders: "*"
+#            allowCredentials: true
 
       routes:
         # AUTH SERVICE PUBLIC
@@ -70,12 +66,11 @@ spring:
         - id: recruitmentService-be
           uri: lb://recruitmentService-be
 #          uri: http://recruitmentService-be-app:8080
+
           predicates:
-<<<<<<< Updated upstream
             - Path=/api/recruitment/**
-=======
             - Path=/api/recruitment/**, /api/chatbot/**, /api/profile/**, /api/internal/**
->>>>>>> Stashed changes
+
           filters:
             - StripPrefix=0
             - name: RequestRateLimiter

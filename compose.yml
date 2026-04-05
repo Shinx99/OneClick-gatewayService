@@ -1,4 +1,7 @@
 services:
+  # ============================================
+  # EUREKA
+  # ============================================
   eureka-server:
     image: foxundermoon/eureka-server:latest
     container_name: eureka-server
@@ -11,7 +14,9 @@ services:
     networks:
       - oneclick-network
 
-  # gateway compose.yml
+  # ============================================
+  # REDIS CACHE
+  # ============================================
   redis:
     image: redis:7-alpine
     container_name: gateway-redis
@@ -20,6 +25,9 @@ services:
     networks:
       - oneclick-network
 
+  # ============================================
+  # GATEWAY
+  # ============================================
   gateway:
     build: .
     container_name: gateway-service-gateway
@@ -44,6 +52,7 @@ services:
       - SPRING_REDIS_HOST=gateway-redis
       - SPRING_REDIS_PORT=6379
     restart: unless-stopped
+
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost:8761/eureka/apps || exit 1" ]
       interval: 30s
@@ -51,9 +60,16 @@ services:
       retries: 10
       start_period: 40s
 
+
+# ============================================
+# VOLUMES
+# ============================================
 volumes:
   maven-cache: {}
 
+# ============================================
+# NETWORKS (ADDED)
+# ============================================
 networks:
   oneclick-network:
     external: true
