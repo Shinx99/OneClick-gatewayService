@@ -46,8 +46,6 @@ spring:
           filters:
             - StripPrefix=0
             - name: WebSocketTokenRelayFilter
-            - SetResponseHeader=Access-Control-Allow-Origin, http://localhost:3000
-            - SetResponseHeader=Access-Control-Allow-Credentials, true
           metadata:
             response-timeout: 600000
             connect-timeout: 600000
