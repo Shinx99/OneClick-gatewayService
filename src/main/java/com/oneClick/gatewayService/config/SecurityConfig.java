@@ -51,9 +51,16 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ← CORS từ env
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ← Preflight OK
-                        .pathMatchers("/ws/**").permitAll()  // Thêm /ws/**
+                        .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .pathMatchers("/ws/**").permitAll()
                         .pathMatchers("/api/auth/**", "/actuator/**").permitAll()
+                        .pathMatchers(HttpMethod.PUT,
+                                "/api/recruitment/company/logo/upload",
+                                "/api/recruitment/company/background/upload")
+                        .hasAuthority("ROLE_recruiter")
+                        .pathMatchers(HttpMethod.GET, "/api/recruitment/company/**").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/api/recruitment/job/**").permitAll()
+
                         .pathMatchers("/api/recruitment/candidate/**").hasAuthority("ROLE_candidate")
                         .pathMatchers("/api/recruitment/employer/**").hasAuthority("ROLE_recruiter")
                         .pathMatchers("/api/admin/**").hasAuthority("ROLE_admin")
