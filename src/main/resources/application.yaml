@@ -11,6 +11,10 @@ spring:
   application:
     name: ${APP_NAME:gateway-service}
 
+  # Tăng buffer size cho multipart upload (default 256KB → 10MB)
+  codec:
+    max-in-memory-size: 10MB
+
   cloud:
     compatibility-verifier:
       enabled: false
@@ -18,6 +22,10 @@ spring:
       logging:
         enabled: true
     gateway:
+      # Cho phép multipart/form-data forwarding (upload ảnh company logo/background)
+      streaming-media-types:
+        - multipart/form-data
+        - application/octet-stream
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials Vary, RETAIN_FIRST
 
