@@ -1,4 +1,4 @@
-// src/main/java/com/oneclick/gatewayService/IPKeyResolver.java
+// src/main/java/com/oneclick/gatewayService/resolver/IPKeyResolver.java
 package com.oneClick.gatewayService.resolver;
 
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;

@@ -62,6 +62,7 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/api/recruitment/job/**").permitAll()
 
                         .pathMatchers("/api/recruitment/candidate/**").hasAuthority("ROLE_candidate")
+                        .pathMatchers("/api/recruitment/**").hasAuthority("ROLE_candidate")
                         .pathMatchers("/api/recruitment/employer/**").hasAuthority("ROLE_recruiter")
                         .pathMatchers("/api/admin/**").hasAuthority("ROLE_admin")
                         .anyExchange().authenticated()
