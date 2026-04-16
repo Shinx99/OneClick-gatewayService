@@ -54,6 +54,30 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .pathMatchers("/ws/**").permitAll()
                         .pathMatchers("/api/auth/**", "/actuator/**").permitAll()
+
+                        // ========== JOB APPLICATION APIs ==========
+                        // Candidate applies for a job
+                        .pathMatchers(HttpMethod.POST, "/api/jobs/apply").hasAuthority("ROLE_candidate")
+
+                        // Check if already applied
+                        .pathMatchers(HttpMethod.GET, "/api/jobs/{jobId}/check-applied").hasAuthority("ROLE_candidate")
+
+                        // Get my applications (candidate)
+                        .pathMatchers(HttpMethod.GET, "/api/applications/my-applications").hasAuthority("ROLE_candidate")
+
+                        // Cancel application (candidate)
+                        .pathMatchers(HttpMethod.DELETE, "/api/applications/{jobId}").hasAuthority("ROLE_candidate")
+
+                        // Get application detail (candidate or employer)
+                        .pathMatchers(HttpMethod.GET, "/api/applications/{jobId}/{candidateId}").authenticated()
+
+                        // Employer: Get candidates by job
+                        .pathMatchers(HttpMethod.GET, "/api/employer/jobs/{jobId}/applications").hasAuthority("ROLE_recruiter")
+
+                        // Employer: Update application status
+                        .pathMatchers(HttpMethod.PATCH, "/api/employer/applications/{jobId}/{candidateId}/status").hasAuthority("ROLE_recruiter")
+
+                        // ========== RECRUITMENT APIs ==========
                         .pathMatchers(HttpMethod.PUT,
                                 "/api/recruitment/company/logo/upload",
                                 "/api/recruitment/company/background/upload")
