@@ -62,7 +62,7 @@ spring:
         - id: recruitmentService-be
           uri: lb://recruitmentService-be
           predicates:
-            - Path=/api/recruitment/**, /api/chatbot/**, /api/profile/**, /api/internal/**, /api/admin/**, /api/jobs/**, /api/applications/**, /api/employer/**
+            - Path=/api/recruitment/**, /api/chatbot/**, /api/profile/**, /api/internal/**, /api/admin/**, /api/jobs/**, /api/applications/**, /api/employer/**, /api/ai-cv-match/**
           filters:
             - StripPrefix=0
             - name: RequestRateLimiter

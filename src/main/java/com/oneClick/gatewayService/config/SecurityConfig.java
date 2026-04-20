@@ -55,6 +55,31 @@ public class SecurityConfig {
                         .pathMatchers("/ws/**").permitAll()
                         .pathMatchers("/api/auth/**", "/actuator/**").permitAll()
 
+                        // ========== AI CV MATCHER APIs (THÊM MỚI) ==========
+                        // Match với resume đã lưu (candidate tự match CV của mình)
+                        .pathMatchers(HttpMethod.POST, "/api/ai-cv-match/resume/{resumeId}/job/{jobId}")
+                        .hasAuthority("ROLE_candidate")
+
+                        // Match với file mới upload (candidate upload CV mới để test)
+                        .pathMatchers(HttpMethod.POST, "/api/ai-cv-match/new/{jobId}")
+                        .hasAuthority("ROLE_candidate")
+
+                        // Match với S3 URL (cho external CV, có thể dùng cho cả candidate và recruiter)
+                        .pathMatchers(HttpMethod.POST, "/api/ai-cv-match/s3/{jobId}")
+                        .authenticated()
+
+                        // Match với cached data (fast match - candidate)
+                        .pathMatchers(HttpMethod.POST, "/api/ai-cv-match/cache/{jobId}")
+                        .hasAuthority("ROLE_candidate")
+
+                        // GET endpoints nếu có (ví dụ: lấy lịch sử match)
+                        .pathMatchers(HttpMethod.GET, "/api/ai-cv-match/history/**")
+                        .hasAuthority("ROLE_candidate")
+
+                        // Admin endpoints (nếu cần)
+                        .pathMatchers(HttpMethod.GET, "/api/ai-cv-match/admin/**")
+                        .hasAuthority("ROLE_admin")
+
                         // ========== JOB APPLICATION APIs ==========
                         // Candidate applies for a job
                         .pathMatchers(HttpMethod.POST, "/api/jobs/apply").hasAuthority("ROLE_candidate")
@@ -76,6 +101,7 @@ public class SecurityConfig {
 
                         // Employer: Update application status
                         .pathMatchers(HttpMethod.PATCH, "/api/employer/applications/{jobId}/{candidateId}/status").hasAuthority("ROLE_recruiter")
+
 
                         // ========== RECRUITMENT APIs ==========
                         .pathMatchers(HttpMethod.PUT,
