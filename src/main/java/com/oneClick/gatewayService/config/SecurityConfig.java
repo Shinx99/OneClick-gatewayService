@@ -108,12 +108,13 @@ public class SecurityConfig {
                                 "/api/recruitment/company/logo/upload",
                                 "/api/recruitment/company/background/upload")
                         .hasAuthority("ROLE_recruiter")
+                        .pathMatchers(HttpMethod.POST, "/api/recruitment/company").hasAuthority("ROLE_recruiter")
                         .pathMatchers(HttpMethod.GET, "/api/recruitment/company/**").permitAll()
                         .pathMatchers(HttpMethod.GET, "/api/recruitment/job/**").permitAll()
 
                         .pathMatchers("/api/recruitment/candidate/**").hasAuthority("ROLE_candidate")
-                        .pathMatchers("/api/recruitment/**").hasAuthority("ROLE_candidate")
                         .pathMatchers("/api/recruitment/employer/**").hasAuthority("ROLE_recruiter")
+                        .pathMatchers("/api/recruitment/**").hasAuthority("ROLE_candidate")
                         .pathMatchers("/api/admin/**").hasAuthority("ROLE_admin")
                         .anyExchange().authenticated()
                 )
