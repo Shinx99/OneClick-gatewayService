@@ -55,6 +55,56 @@ public class SecurityConfig {
                         .pathMatchers("/ws/**").permitAll()
                         .pathMatchers("/api/auth/**", "/actuator/**").permitAll()
 
+                                // ========== JOB APPLICATION APIs (CẦN THÊM) ==========
+                                // 1. Employer: Get application stats
+                                .pathMatchers(HttpMethod.GET, "/api/employer/jobs/{jobId}/applications/stats")
+                                .hasAuthority("ROLE_recruiter")
+
+                                // 2. Employer: Get application detail by applicationId
+                                .pathMatchers(HttpMethod.GET, "/api/employer/applications/{applicationId}")
+                                .hasAuthority("ROLE_recruiter")
+
+                                // 3. Employer: Get application history
+                                .pathMatchers(HttpMethod.GET, "/api/employer/applications/{applicationId}/history")
+                                .hasAuthority("ROLE_recruiter")
+
+                                // 4. Employer: Update application status (API mới dùng applicationId)
+                                .pathMatchers(HttpMethod.PATCH, "/api/employer/applications/{applicationId}/status")
+                                .hasAuthority("ROLE_recruiter")
+
+                                // 5. Employer: Schedule interview
+                                .pathMatchers(HttpMethod.POST, "/api/employer/applications/{applicationId}/schedule-interview")
+                                .hasAuthority("ROLE_recruiter")
+
+                                // 6. Employer: Cancel interview
+                                .pathMatchers(HttpMethod.DELETE, "/api/employer/schedule-interview/{scheduleId}")
+                                .hasAuthority("ROLE_recruiter")
+
+                                // 7. Employer: Get my jobs
+                                .pathMatchers(HttpMethod.GET, "/api/employer/jobs")
+                                .hasAuthority("ROLE_recruiter")
+
+                                // ========== NOTIFICATION APIs (CẦN THÊM) ==========
+                                // 8. Candidate: Get my notifications
+                                .pathMatchers(HttpMethod.GET, "/api/notifications/my")
+                                .hasAuthority("ROLE_candidate")
+
+                                // 9. Candidate: Get unread count
+                                .pathMatchers(HttpMethod.GET, "/api/notifications/unread-count")
+                                .hasAuthority("ROLE_candidate")
+
+                                // 10. Candidate: Mark notification as read
+                                .pathMatchers(HttpMethod.PATCH, "/api/notifications/{id}/read")
+                                .hasAuthority("ROLE_candidate")
+
+                                // 11. Employer: Get employer notifications
+                                .pathMatchers(HttpMethod.GET, "/api/employer/notifications")
+                                .hasAuthority("ROLE_recruiter")
+
+                                // 12. Employer: Get employer unread count
+                                .pathMatchers(HttpMethod.GET, "/api/employer/notifications/unread-count")
+                                .hasAuthority("ROLE_recruiter")
+
                         // ========== AI CV MATCHER APIs (THÊM MỚI) ==========
                         // Match với resume đã lưu (candidate tự match CV của mình)
                         .pathMatchers(HttpMethod.POST, "/api/ai-cv-match/resume/{resumeId}/job/{jobId}")
