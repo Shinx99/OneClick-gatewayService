@@ -154,12 +154,24 @@ public class SecurityConfig {
 
 
                         // ========== RECRUITMENT APIs ==========
+                        // Join Company Request
+                        .pathMatchers(HttpMethod.POST, "/api/recruitment/company/*/join-request").hasAuthority("ROLE_recruiter")
+                        .pathMatchers(HttpMethod.GET, "/api/recruitment/company/join-requests").hasAuthority("ROLE_recruiter")
+                        .pathMatchers(HttpMethod.PUT, "/api/recruitment/company/join-request/*/approve").hasAuthority("ROLE_recruiter")
+                        .pathMatchers(HttpMethod.PUT, "/api/recruitment/company/join-request/*/reject").hasAuthority("ROLE_recruiter")
+
                         .pathMatchers(HttpMethod.PUT,
                                 "/api/recruitment/company/logo/upload",
                                 "/api/recruitment/company/background/upload")
                         .hasAuthority("ROLE_recruiter")
                         .pathMatchers(HttpMethod.POST, "/api/recruitment/company").hasAuthority("ROLE_recruiter")
                         .pathMatchers(HttpMethod.GET, "/api/recruitment/company/**").permitAll()
+                        // Job CRUD (recruiter)
+                        .pathMatchers(HttpMethod.POST, "/api/recruitment/job/create").hasAuthority("ROLE_recruiter")
+                        .pathMatchers(HttpMethod.GET, "/api/recruitment/job/my-jobs").hasAuthority("ROLE_recruiter")
+                        .pathMatchers(HttpMethod.PUT, "/api/recruitment/job/*/image/upload").hasAuthority("ROLE_recruiter")
+                        .pathMatchers(HttpMethod.PUT, "/api/recruitment/job/*").hasAuthority("ROLE_recruiter")
+                        .pathMatchers(HttpMethod.DELETE, "/api/recruitment/job/*").hasAuthority("ROLE_recruiter")
                         .pathMatchers(HttpMethod.GET, "/api/recruitment/job/**").permitAll()
 
                         .pathMatchers("/api/recruitment/candidate/**").hasAuthority("ROLE_candidate")
