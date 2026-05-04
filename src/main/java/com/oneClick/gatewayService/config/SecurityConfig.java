@@ -123,6 +123,9 @@ public class SecurityConfig {
                                 "/api/recruitment/company/background/upload")
                         .hasAuthority("ROLE_recruiter")
                         .pathMatchers(HttpMethod.POST, "/api/recruitment/company").hasAuthority("ROLE_recruiter")
+                        // My company (recruiter's own)
+                        .pathMatchers(HttpMethod.GET, "/api/recruitment/company/my-company").hasAuthority("ROLE_recruiter")
+                        .pathMatchers(HttpMethod.PUT, "/api/recruitment/company/my-company").hasAuthority("ROLE_recruiter")
                         .pathMatchers(HttpMethod.GET, "/api/recruitment/company/**").permitAll()
 
                         // Job CRUD (recruiter)
