@@ -85,7 +85,7 @@ public class SecurityConfig {
 
                         // ========== AI CV MATCHER APIs ==========
                         .pathMatchers(HttpMethod.POST, "/api/ai-cv-match/resume/{resumeId}/job/{jobId}")
-                        .hasAuthority("ROLE_candidate")
+                        .hasAnyAuthority("ROLE_candidate", "ROLE_recruiter")
                         .pathMatchers(HttpMethod.POST, "/api/ai-cv-match/new/{jobId}")
                         .hasAuthority("ROLE_candidate")
                         .pathMatchers(HttpMethod.POST, "/api/ai-cv-match/s3/{jobId}")
