@@ -113,7 +113,7 @@ public class SecurityConfig {
 
                         // ========== RECRUITMENT APIs ==========
                         // Join Company Request
-                        .pathMatchers(HttpMethod.POST, "/api/recruitment/company/*/join-request").hasAuthority("ROLE_recruiter")
+                        .pathMatchers("/api/recruitment/candidate/profile/**").hasAnyAuthority("ROLE_candidate", "ROLE_recruiter", "ROLE_admin")                        .pathMatchers(HttpMethod.POST, "/api/recruitment/company/*/join-request").hasAuthority("ROLE_recruiter")
                         .pathMatchers(HttpMethod.GET, "/api/recruitment/company/join-requests").hasAuthority("ROLE_recruiter")
                         .pathMatchers(HttpMethod.PUT, "/api/recruitment/company/join-request/*/approve").hasAuthority("ROLE_recruiter")
                         .pathMatchers(HttpMethod.PUT, "/api/recruitment/company/join-request/*/reject").hasAuthority("ROLE_recruiter")
@@ -135,11 +135,12 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.PUT, "/api/recruitment/job/*").hasAuthority("ROLE_recruiter")
                         .pathMatchers(HttpMethod.DELETE, "/api/recruitment/job/*").hasAuthority("ROLE_recruiter")
                         .pathMatchers(HttpMethod.GET, "/api/recruitment/job/**").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/api/recruitment/job/employer/jobs").authenticated()
 
-                        // ✅ FIX: employer/** trước recruitment/** (specific trước broad)
-                        .pathMatchers("/api/recruitment/candidate/**").hasAuthority("ROLE_candidate")
+                        // employer/** trước recruitment/** (specific trước broad)
+                        .pathMatchers("/api/recruitment/candidate/**").hasAnyAuthority("ROLE_candidate", "ROLE_recruiter")
                         .pathMatchers("/api/recruitment/employer/**").hasAuthority("ROLE_recruiter")
-                        .pathMatchers("/api/recruitment/**").hasAuthority("ROLE_candidate")
+                        .pathMatchers("/api/recruitment/**").permitAll()
                         .pathMatchers("/api/admin/**").hasAuthority("ROLE_admin")
                         .anyExchange().authenticated()
                 )
